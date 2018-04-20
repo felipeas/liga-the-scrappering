@@ -1,23 +1,21 @@
 var request = require('request');
 var cheerio = require('cheerio');
 const { json } = require('micro');
+const { send } = require('micro');
 
 const LIGA_URL = 'https://www.ligamagic.com.br/';
-const cardsToCheck = ['Tropical Island', 'Gush'];
-
-const notfound = (req, res) =>
-  send(res, 404, 'not the droids you are looking for');
 
 module.exports = async function(req, res) {
-  let r;
+  let response;
+
   const data = await json(req);
-  // console.log(data);
-  // await console.log(res);
+  if (!data) return send(res, 400, 'not the droids you are looking for');
+
   await scrapCardsPrices(data).then(cardsData => {
-    r = cardsData;
+    response = cardsData;
   });
 
-  return r;
+  send(res, 200, response);
 };
 
 async function scrapCardsPrices(list) {
