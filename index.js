@@ -1,11 +1,17 @@
 var request = require('request');
 var cheerio = require('cheerio');
-const { json } = require('micro');
-const { send } = require('micro');
+const { json, send } = require('micro');
+const cors = require('micro-cors')();
+
+cors({
+  allowMethods: ['GET', 'POST']
+});
 
 const LIGA_URL = 'https://www.ligamagic.com.br/';
 
-module.exports = async function(req, res) {
+module.exports = cors(handler);
+
+async function handler(req, res) {
   let response;
 
   const data = await json(req);
@@ -16,7 +22,7 @@ module.exports = async function(req, res) {
   });
 
   send(res, 200, response);
-};
+}
 
 async function scrapCardsPrices(list) {
   if (!list) return;
@@ -32,7 +38,7 @@ async function scrapCardsPrices(list) {
     out = results;
   });
 
-  return out;
+  return JSON.stringify(out);
 }
 
 function scrapCardPrice(card) {
@@ -52,7 +58,7 @@ function scrapCardPrice(card) {
                 .replace(',', '.')
                 .replace(/[^-.0-9]/g, '')
             ),
-            link: $('.e-col8 > div > a', elm).attr('href'),
+            link: `${LIGA_URL}${$('.e-col8 > div > a', elm).attr('href')}`,
             condicao: $('.e-col4 > font', elm).text(),
             quantidade: parseInt(
               $('.e-col5', elm)
@@ -62,7 +68,7 @@ function scrapCardPrice(card) {
             idioma: $('.e-col4 > img', elm).attr('title')
           });
         });
-        resolve(prices);
+        resolve({ card, prices });
       }
     });
   });
