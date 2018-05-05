@@ -51,7 +51,11 @@ function scrapCardPrice(card) {
 
         $('.estoque-linha[mp="2"]').each((i, elm) => {
           prices.push({
-            lojaImg: `http:${$('.e-col1 > a > img', elm).attr('src')}`,
+            loja: {
+              nome: `${$('.e-col1 > a > img', elm).attr('title')}`,
+              imagem: `http:${$('.e-col1 > a > img', elm).attr('src')}`
+            },
+            edicao: $('.e-col2 > font > a', elm).text(),
             preco: parseFloat(
               $('.e-col3', elm)
                 .text()
@@ -60,6 +64,7 @@ function scrapCardPrice(card) {
             ),
             link: `${LIGA_URL}${$('.e-col8 > div > a', elm).attr('href')}`,
             condicao: $('.e-col4 > font', elm).text(),
+
             quantidade: parseInt(
               $('.e-col5', elm)
                 .text()
@@ -68,6 +73,7 @@ function scrapCardPrice(card) {
             idioma: $('.e-col4 > img', elm).attr('title')
           });
         });
+        console.log(prices);
         resolve({ card, prices });
       }
     });
