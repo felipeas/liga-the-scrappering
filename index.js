@@ -17,6 +17,7 @@ async function handler(req, res) {
   const data = await json(req);
   if (!data) return send(res, 400, 'not the droids you are looking for');
 
+  console.log(data);
   await scrapCardsPrices(data).then(cardsData => {
     response = cardsData;
   });
