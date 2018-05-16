@@ -60,6 +60,7 @@ function scrapCardPrice(card) {
             preco: parseFloat(
               $('.e-col3', elm)
                 .text()
+                .replace('.', '')
                 .replace(',', '.')
                 .replace(/[^-.0-9]/g, '')
             ),
