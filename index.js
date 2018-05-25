@@ -52,6 +52,7 @@ function scrapCardPrice(card) {
 
         $('.estoque-linha[mp="2"]').each((i, elm) => {
           prices.push({
+            card,
             loja: {
               nome: `${$('.e-col1 > a > img', elm).attr('title')}`,
               imagem: `http:${$('.e-col1 > a > img', elm).attr('src')}`
