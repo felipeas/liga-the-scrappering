@@ -77,7 +77,7 @@ function scrapCardPrice(card) {
           });
         });
         console.log(prices);
-        resolve({ card, prices });
+        resolve({ group: card, prices });
       }
     });
   });
